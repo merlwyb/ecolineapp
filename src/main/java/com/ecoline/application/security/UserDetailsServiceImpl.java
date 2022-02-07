@@ -1,7 +1,7 @@
 package com.ecoline.application.security;
 
 import com.ecoline.application.data.entity.User;
-import com.ecoline.application.data.service.UserRepository;
+import com.ecoline.application.data.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;

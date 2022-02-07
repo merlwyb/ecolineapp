@@ -4,12 +4,10 @@ import com.ecoline.application.data.AbstractEntity;
 import com.ecoline.application.data.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Set;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "USER")
 public class User extends AbstractEntity {
 
     private String username;

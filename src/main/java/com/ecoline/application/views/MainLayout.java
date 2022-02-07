@@ -2,19 +2,20 @@ package com.ecoline.application.views;
 
 import com.ecoline.application.data.entity.User;
 import com.ecoline.application.security.AuthenticatedUser;
-import com.ecoline.application.views.helloworld.HelloWorldView;
-import com.ecoline.application.views.helloworld1.HelloWorld1View;
-import com.ecoline.application.views.helloworld2.HelloWorld2View;
-import com.ecoline.application.views.helloworld3.HelloWorld3View;
-import com.ecoline.application.views.helloworld4.HelloWorld4View;
-import com.ecoline.application.views.helloworld5.HelloWorld5View;
-import com.ecoline.application.views.helloworld6.HelloWorld6View;
-import com.ecoline.application.views.helloworld7.HelloWorld7View;
-import com.ecoline.application.views.masterdetail.MasterDetailView;
-import com.ecoline.application.views.masterdetail2.MasterDetail2View;
-import com.ecoline.application.views.masterdetail3.MasterDetail3View;
-import com.ecoline.application.views.personform.PersonFormView;
-import com.ecoline.application.views.personform1.PersonForm1View;
+import com.ecoline.application.views.correction.CorrectionDetailView;
+import com.ecoline.application.views.correction.CorrectionFormView;
+import com.ecoline.application.views.correction.CorrectionOrderFormView;
+import com.ecoline.application.views.correction.CorrectionView;
+import com.ecoline.application.views.mixing.MixingFormView;
+import com.ecoline.application.views.mixing.MixingView;
+import com.ecoline.application.views.rolling.RollingDryingFormView;
+import com.ecoline.application.views.rolling.RollingFormView;
+import com.ecoline.application.views.rolling.RollingView;
+import com.ecoline.application.views.selecting.SelectingFormView;
+import com.ecoline.application.views.selecting.SelectingView;
+import com.ecoline.application.views.weighing.PortionDetailView;
+import com.ecoline.application.views.weighing.PortionFormView;
+import com.ecoline.application.views.weighing.PortionView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -29,14 +30,13 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * The main view is a top-level placeholder for other views.
- */
 @PageTitle("Main")
 public class MainLayout extends AppLayout {
 
@@ -72,8 +72,12 @@ public class MainLayout extends AppLayout {
     public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
         this.authenticatedUser = authenticatedUser;
         this.accessChecker = accessChecker;
-
+        //getElement().getThemeList().add("app-nav-layout");
         addToNavbar(createHeaderContent());
+
+
+        //menu = createMenuTabs();
+        //addToNavbar(menu);
     }
 
     private Component createHeaderContent() {
@@ -91,12 +95,14 @@ public class MainLayout extends AppLayout {
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
 
+            VaadinSession.getCurrent().setAttribute("username", user.getUsername());
+
             Avatar avatar = new Avatar(user.getName(), user.getProfilePictureUrl());
             avatar.addClassNames("me-xs");
 
             ContextMenu userMenu = new ContextMenu(avatar);
             userMenu.setOpenOnClick(true);
-            userMenu.addItem("Logout", e -> {
+            userMenu.addItem("Выйти", e -> {
                 authenticatedUser.logout();
             });
 
@@ -128,31 +134,36 @@ public class MainLayout extends AppLayout {
 
     private List<RouterLink> createLinks() {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
-                new MenuItemInfo("Hello World", "la la-globe", HelloWorldView.class), //
+                new MenuItemInfo("Навесчик", "la la-user", PortionView.class),
 
-                new MenuItemInfo("Hello World1", "la la-globe", HelloWorld1View.class), //
+                new MenuItemInfo("Список навесок", "la la-columns", PortionDetailView.class),
 
-                new MenuItemInfo("Hello World2", "la la-globe", HelloWorld2View.class), //
+                new MenuItemInfo("Форма навески", "la la-plus", PortionFormView.class),
 
-                new MenuItemInfo("Hello World3", "la la-globe", HelloWorld3View.class), //
+                new MenuItemInfo("Технолог", "la la-user", CorrectionView.class),
 
-                new MenuItemInfo("Hello World4", "la la-globe", HelloWorld4View.class), //
+                new MenuItemInfo("Форма добавления заказа", "la la-plus", CorrectionOrderFormView.class),
 
-                new MenuItemInfo("Hello World5", "la la-globe", HelloWorld5View.class), //
+                new MenuItemInfo("Список заказов", "la la-columns", CorrectionDetailView.class),
 
-                new MenuItemInfo("Hello World6", "la la-globe", HelloWorld6View.class), //
+                //new MenuItemInfo("Форма корректировки","la la-plus", CorrectionFormView.class),
 
-                new MenuItemInfo("Hello World7", "la la-globe", HelloWorld7View.class), //
+                new MenuItemInfo("Оператор", "la la-user", MixingView.class),
 
-                new MenuItemInfo("Master-Detail", "la la-columns", MasterDetailView.class), //
+                new MenuItemInfo("Форма смешивания", "la la-plus", MixingFormView.class),
 
-                new MenuItemInfo("Master-Detail2", "la la-columns", MasterDetail2View.class), //
+                new MenuItemInfo("Вальцовщик", "la la-user", RollingView.class),
 
-                new MenuItemInfo("Master-Detail3", "la la-columns", MasterDetail3View.class), //
+                new MenuItemInfo("Форма вальцевания", "la la-plus", RollingFormView.class),
 
-                new MenuItemInfo("Person Form", "la la-user", PersonFormView.class), //
+                new MenuItemInfo("Форма вальцевания", "la la-plus", RollingDryingFormView.class),
 
-                new MenuItemInfo("Person Form1", "la la-user", PersonForm1View.class), //
+                new MenuItemInfo("Лаборант", "la la-user", SelectingView.class),
+
+                new MenuItemInfo("Форма выборки", "la la-plus", SelectingFormView.class),
+
+
+                //new MenuItemInfo("Форма добавления заказа","la la-plus", CorrectionOrderFormView.class),
 
         };
         List<RouterLink> links = new ArrayList<>();

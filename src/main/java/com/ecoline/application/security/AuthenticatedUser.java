@@ -1,7 +1,7 @@
 package com.ecoline.application.security;
 
 import com.ecoline.application.data.entity.User;
-import com.ecoline.application.data.service.UserRepository;
+import com.ecoline.application.data.repository.UserRepository;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
 import java.util.Optional;
