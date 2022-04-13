@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Service
 public class OrderService {
+
     private OrderRepository orderRepository;
 
     public OrderService(@Autowired OrderRepository orderRepository) {
@@ -40,55 +41,68 @@ public class OrderService {
         return (int) orderRepository.count();
     }
 
-    @Transactional(readOnly = true)
-    public List<Long> getIdsWithoutComponent(String component) {
-        switch (component) {
-            case "Каучук":
-                return orderRepository.findIdsWithoutRubber();
-            case "Сыпучая смесь":
-                return orderRepository.findIdsWithoutBulk();
-            case "Мел":
-                return orderRepository.findIdsWithoutChalk();
-        }
-        return orderRepository.findIdsWithoutCarbon();
+    public List<Order> getAllWhereIsRecipeSelected() {
+        return orderRepository.findAllWhereIsRecipeSelected();
     }
 
-    ;
-
-    @Transactional(readOnly = true)
-    public void updateComponentId(String component, Long orderId, Long portionId, double portionWeight) {
-        switch (component) {
-            case "Каучук":
-                orderRepository.putRubberIdAndWeight(orderId, portionId, portionWeight);
-                return;
-            case "Сыпучая смесь":
-                orderRepository.putBulkIdAndWeight(orderId, portionId, portionWeight);
-                return;
-            case "Мел":
-                orderRepository.putChalkIdAndWeight(orderId, portionId, portionWeight);
-                return;
-        }
-        orderRepository.putCarbonIdAndWeight(orderId, portionId, portionWeight);
+    public List<Order> getAllWhereIsNotSend() {
+        return orderRepository.findAllWhereIsNotSend();
     }
 
-    ;
-
-    public List<Order> getAllWhereIsNotCorrected() {
-        return orderRepository.findAllWhereIsNotCorrected();
+    public Order getByStringIdentifier(String stringIdentifier) {
+        return orderRepository.findByStringIdentifier(stringIdentifier);
     }
 
-    public List<Order> getAllWhereIsNotMixed() {
-        return orderRepository.findAllWhereIsNotMixed();
+    public List<Order> getAllWhereIsWeighted() {
+        return orderRepository.findAllWhereIsWeighted();
     }
 
+//    @Transactional(readOnly = true)
+//    public List<Long> getIdsWithoutComponent(String component) {
+//        switch (component) {
+//            case "Каучук":
+//                return orderRepository.findIdsWithoutRubber();
+//            case "Сыпучая смесь":
+//                return orderRepository.findIdsWithoutBulk();
+//            case "Мел":
+//                return orderRepository.findIdsWithoutChalk();
+//        }
+//        return orderRepository.findIdsWithoutCarbon();
+//    }
+
+
+//    @Transactional(readOnly = true)
+//    public void updateComponentId(String component, Long orderId, Long portionId, double portionWeight) {
+//        switch (component) {
+//            case "Каучук":
+//                orderRepository.putRubberIdAndWeight(orderId, portionId, portionWeight);
+//                return;
+//            case "Сыпучая смесь":
+//                orderRepository.putBulkIdAndWeight(orderId, portionId, portionWeight);
+//                return;
+//            case "Мел":
+//                orderRepository.putChalkIdAndWeight(orderId, portionId, portionWeight);
+//                return;
+//        }
+//        orderRepository.putCarbonIdAndWeight(orderId, portionId, portionWeight);
+//    }
+
+
+//    public List<Order> getAllWhereIsNotCorrected() {
+//        return orderRepository.findAllWhereIsNotCorrected();
+//    }
+//
+//    public List<Order> getAllWhereIsNotMixed() {
+//        return orderRepository.findAllWhereIsNotMixed();
+//    }
+//
     public List<Order> getAllWhereIsNotRolled() {
         return orderRepository.findAllWhereIsNotRolled();
     }
-
-    public List<Order> getAllWhereIsNotSelected() {
-        return orderRepository.findAllWhereIsNotSelected();
-    }
-
-    public List<Order> getAllWhereIsNotDried() {return orderRepository.findAllWhereIsNotDried();
-    }
+//
+//    public List<Order> getAllWhereIsNotSelected() {
+//        return orderRepository.findAllWhereIsNotSelected();
+//    }
+//
+    public List<Order> getAllWhereIsNotDried() {return orderRepository.findAllWhereIsNotDried();    }
 }

@@ -2,20 +2,39 @@ package com.ecoline.application.views;
 
 import com.ecoline.application.data.entity.User;
 import com.ecoline.application.security.AuthenticatedUser;
-import com.ecoline.application.views.correction.CorrectionDetailView;
-import com.ecoline.application.views.correction.CorrectionFormView;
-import com.ecoline.application.views.correction.CorrectionOrderFormView;
-import com.ecoline.application.views.correction.CorrectionView;
-import com.ecoline.application.views.mixing.MixingFormView;
-import com.ecoline.application.views.mixing.MixingView;
-import com.ecoline.application.views.rolling.RollingDryingFormView;
-import com.ecoline.application.views.rolling.RollingFormView;
-import com.ecoline.application.views.rolling.RollingView;
-import com.ecoline.application.views.selecting.SelectingFormView;
-import com.ecoline.application.views.selecting.SelectingView;
-import com.ecoline.application.views.weighing.PortionDetailView;
-import com.ecoline.application.views.weighing.PortionFormView;
-import com.ecoline.application.views.weighing.PortionView;
+//import com.ecoline.application.views.correction.CorrectionDetailView;
+//import com.ecoline.application.views.correction.CorrectionFormView;
+//import com.ecoline.application.views.correction.CorrectionOrderFormView;
+//import com.ecoline.application.views.correction.CorrectionView;
+//import com.ecoline.application.views.mixing.MixingFormView;
+//import com.ecoline.application.views.mixing.MixingView;
+//import com.ecoline.application.views.rolling.RollingDryingFormView;
+//import com.ecoline.application.views.rolling.RollingFormView;
+//import com.ecoline.application.views.rolling.RollingView;
+//import com.ecoline.application.views.selecting.SelectingFormView;
+//import com.ecoline.application.views.selecting.SelectingView;
+//import com.ecoline.application.views.weighing.PortionDetailView;
+//import com.ecoline.application.views.weighing.PortionFormView;
+//import com.ecoline.application.views.weighing.PortionView;
+//import com.ecoline.application.views.weighing.rubber.WeighingRubberDetailView;
+//import com.ecoline.application.views.weighing.rubber.WeighingRubberFormView;
+//import com.ecoline.application.views.weighing.rubber.WeighingRubberView;
+import com.ecoline.application.views.labworker.LabMasterDetailView;
+import com.ecoline.application.views.labworker.LabView;
+import com.ecoline.application.views.machinist.MixingFormView;
+import com.ecoline.application.views.machinist.MixingView;
+import com.ecoline.application.views.rollerman.RollingDryingFormView;
+import com.ecoline.application.views.rollerman.RollingFormView;
+import com.ecoline.application.views.rollerman.RollingView;
+import com.ecoline.application.views.technologist.*;
+import com.ecoline.application.views.weighing.bulk.WeighingBulkFormView;
+import com.ecoline.application.views.weighing.bulk.WeighingBulkView;
+import com.ecoline.application.views.weighing.carbon.WeighingCarbonFormView;
+import com.ecoline.application.views.weighing.carbon.WeighingCarbonView;
+import com.ecoline.application.views.weighing.chalk.WeighingChalkFormView;
+import com.ecoline.application.views.weighing.chalk.WeighingChalkView;
+import com.ecoline.application.views.weighing.rubber.WeighingRubberFormView;
+import com.ecoline.application.views.weighing.rubber.WeighingRubberView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -133,22 +152,31 @@ public class MainLayout extends AppLayout {
     }
 
     private List<RouterLink> createLinks() {
-        MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
-                new MenuItemInfo("Навесчик", "la la-user", PortionView.class),
+        MenuItemInfo[] menuItems = new MenuItemInfo[]{
 
-                new MenuItemInfo("Список навесок", "la la-columns", PortionDetailView.class),
+                new MenuItemInfo("Навесчик каучука", "la la-user", WeighingRubberView.class),
 
-                new MenuItemInfo("Форма навески", "la la-plus", PortionFormView.class),
+                new MenuItemInfo("Форма навески", "la la-plus", WeighingRubberFormView.class),
 
-                new MenuItemInfo("Технолог", "la la-user", CorrectionView.class),
+                new MenuItemInfo("Навесчик сып. смеси", "la la-user", WeighingBulkView.class),
 
-                new MenuItemInfo("Форма добавления заказа", "la la-plus", CorrectionOrderFormView.class),
+                new MenuItemInfo("Форма навески", "la la-plus", WeighingBulkFormView.class),
 
-                new MenuItemInfo("Список заказов", "la la-columns", CorrectionDetailView.class),
+                new MenuItemInfo("Навесчик мела", "la la-user", WeighingChalkView.class),
 
-                //new MenuItemInfo("Форма корректировки","la la-plus", CorrectionFormView.class),
+                new MenuItemInfo("Форма навески", "la la-plus", WeighingChalkFormView.class),
 
-                new MenuItemInfo("Оператор", "la la-user", MixingView.class),
+                new MenuItemInfo("Навесчик техуглерода", "la la-user", WeighingCarbonView.class),
+
+                new MenuItemInfo("Форма навески", "la la-plus", WeighingCarbonFormView.class),
+
+                new MenuItemInfo("Технолог", "la la-user", TechnologistView.class),
+
+                new MenuItemInfo("Список заказов", "la la-columns", TechnologistOrderDetailView.class),
+
+                new MenuItemInfo("Форма редактирования заказа", "la la-plus", TechnologistOrderFormView.class),
+
+                new MenuItemInfo("Машинист", "la la-user", MixingView.class),
 
                 new MenuItemInfo("Форма смешивания", "la la-plus", MixingFormView.class),
 
@@ -156,11 +184,31 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Форма вальцевания", "la la-plus", RollingFormView.class),
 
-                new MenuItemInfo("Форма вальцевания", "la la-plus", RollingDryingFormView.class),
+                new MenuItemInfo("Форма сушки", "la la-plus", RollingDryingFormView.class),
 
-                new MenuItemInfo("Лаборант", "la la-user", SelectingView.class),
+                new MenuItemInfo("Лаборант", "la la-user", LabView.class),
 
-                new MenuItemInfo("Форма выборки", "la la-plus", SelectingFormView.class),
+                new MenuItemInfo("Журнал 1", "la la-columns", LabMasterDetailView.class),
+
+//                new MenuItemInfo("Редактирование рецептурной карты заказа", "la la-columns", TechnologistRecipeCardMasterDetailView.class),
+
+//                new MenuItemInfo("Редактирование/добавление рецептуры", "la la-columns", TechnologistRecipeMasterDetailView.class),
+//
+//                //new MenuItemInfo("Форма корректировки","la la-plus", CorrectionFormView.class),
+//
+//                new MenuItemInfo("Оператор", "la la-user", MixingView.class),
+//
+//                new MenuItemInfo("Форма смешивания", "la la-plus", MixingFormView.class),
+//
+//                new MenuItemInfo("Вальцовщик", "la la-user", RollingView.class),
+//
+//                new MenuItemInfo("Форма вальцевания", "la la-plus", RollingFormView.class),
+//
+//                new MenuItemInfo("Форма вальцевания", "la la-plus", RollingDryingFormView.class),
+//
+//                new MenuItemInfo("Лаборант", "la la-user", SelectingView.class),
+//
+//                new MenuItemInfo("Форма выборки", "la la-plus", SelectingFormView.class),
 
 
                 //new MenuItemInfo("Форма добавления заказа","la la-plus", CorrectionOrderFormView.class),

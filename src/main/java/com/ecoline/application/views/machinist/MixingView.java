@@ -1,8 +1,6 @@
-package com.ecoline.application.views.mixing;
+package com.ecoline.application.views.machinist;
 
 import com.ecoline.application.views.MainLayout;
-import com.ecoline.application.views.correction.CorrectionDetailView;
-import com.ecoline.application.views.correction.CorrectionOrderFormView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -11,7 +9,7 @@ import com.vaadin.flow.router.Route;
 
 import javax.annotation.security.RolesAllowed;
 
-@PageTitle("Оператор")
+@PageTitle("Машинист")
 @Route(value = "mixing", layout = MainLayout.class)
 @RolesAllowed({"admin","user","operator"})
 public class MixingView extends VerticalLayout {
@@ -19,7 +17,7 @@ public class MixingView extends VerticalLayout {
     private Button mixingFormButton;
 
     public MixingView() {
-        mixingFormButton = new Button("Заполнить форму для смешивания");
+        mixingFormButton = new Button("Перейти к смешиванию");
 
         mixingFormButton.addClickListener(e-> UI.getCurrent().navigate(MixingFormView.class));
 

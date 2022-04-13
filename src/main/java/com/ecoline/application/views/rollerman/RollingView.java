@@ -1,8 +1,6 @@
-package com.ecoline.application.views.rolling;
+package com.ecoline.application.views.rollerman;
 
 import com.ecoline.application.views.MainLayout;
-import com.ecoline.application.views.correction.CorrectionDetailView;
-import com.ecoline.application.views.correction.CorrectionOrderFormView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -33,3 +31,5 @@ public class RollingView extends VerticalLayout {
     }
 
 }
+
+//todo По нему только принял, сколько по времени вальцевал, когда снял

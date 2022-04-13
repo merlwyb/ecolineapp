@@ -1,8 +1,10 @@
 package com.ecoline.application.data;
 
 public enum Role {
-    USER("user"), ADMIN("admin"), WEIGHER("weigher"), TECHNOLOGIST("technologist"),
-    OPERATOR("operator"), ROLLERMAN("rollerman"), LABWORKER("labworker"),
+    USER("user"), ADMIN("admin"), WEIGHER_RUBBER("weigher_rubber"),
+    WEIGHER_BULK("weigher_bulk"), WEIGHER_CHALK("weigher_chalk"),
+    WEIGHER_CARBON("weigher_carbon"),TECHNOLOGIST("technologist"),
+    MACHINIST("machinist"), ROLLERMAN("rollerman"), LABWORKER("labworker"),
     ROLE6("role6"), ROLE7("role7"), ;
 
     private String roleName;

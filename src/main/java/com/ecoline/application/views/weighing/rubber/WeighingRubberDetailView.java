@@ -1,4 +1,4 @@
-package com.ecoline.application.views.weighing;
+package com.ecoline.application.views.weighing.rubber;
 
 import com.ecoline.application.security.AuthenticatedUser;
 import com.ecoline.application.views.MainLayout;
@@ -16,9 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import javax.annotation.security.RolesAllowed;
 
 //@PageTitle("Список навесок")
-//@Route(value = "weighing-detail", layout = MainLayout.class)
-//@RolesAllowed({"admin","user","weigher"})
-//public class PortionDetailView extends Div {
+//@Route(value = "weighing-detail-rubber", layout = MainLayout.class)
+//@RolesAllowed({"admin","user","weigher_rubber"})
+//public class WeighingRubberDetailView extends Div {
 //
 //    private Grid<Portion> grid = new Grid<>(Portion.class, false);
 //
@@ -26,7 +26,7 @@ import javax.annotation.security.RolesAllowed;
 //
 //    private AuthenticatedUser authenticatedUser;
 //
-//    public PortionDetailView(@Autowired PortionService portionService) {
+//    public WeighingRubberDetailView(@Autowired PortionService portionService) {
 //        this.portionService = portionService;
 //        addClassNames("master-detail-view", "flex", "flex-col", "h-full");
 //

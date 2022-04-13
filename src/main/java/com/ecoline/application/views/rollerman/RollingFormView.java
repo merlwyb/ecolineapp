@@ -1,4 +1,4 @@
-package com.ecoline.application.views.rolling;
+package com.ecoline.application.views.rollerman;
 
 import com.ecoline.application.data.entity.Order;
 import com.ecoline.application.data.service.OrderService;
@@ -14,24 +14,23 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.converter.StringToLongConverter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.stream.Collectors;
 
-@PageTitle("Добавление вальцевания")
+@PageTitle("Форма вальцевания")
 @Route(value = "rolling-proceed", layout = MainLayout.class)
 @RolesAllowed({"admin", "user", "rollerman"})
 @Uses(Icon.class)
 public class RollingFormView extends Div {
 
     private Select<Long> orderId = new Select<>();
-    private TextField respRolling = new TextField("Ответственный за вальцевание");
+    private IntegerField rollingTime = new IntegerField("Время вальцевания(с)");
+    //private TextField respRolling = new TextField("Ответственный за вальцевание");
 
     private Button cancel = new Button("Отменить");
     private Button save = new Button("Сохранить");
@@ -48,7 +47,7 @@ public class RollingFormView extends Div {
         addItemsInSelectOrders(orderService);
 
         orderId.setLabel("Номер заказа");
-        respRolling.setReadOnly(true);
+        //respRolling.setReadOnly(true);
 
         //binder.bindInstanceFields(this);
 
@@ -56,28 +55,29 @@ public class RollingFormView extends Div {
         clearForm();
 
         orderId.addValueChangeListener(e -> {
-            if (!orderId.isEmpty()) {
-                binder.setBean(orderService.get(orderId.getValue()).get());
-                //binder.getBean().setRespUsernameMixing(VaadinSession.getCurrent().getAttribute("username").toString());
-                save.setEnabled(true);
-            } else {
-                Notification.show("Выберите заказ");
-            }
+            binder.setBean(orderService.get(orderId.getValue()).get());
+            //binder.getBean().setRespUsernameMixing(VaadinSession.getCurrent().getAttribute("username").toString());
+            save.setEnabled(true);
+
         });
         cancel.addClickListener(e -> clearForm());
         save.addClickListener(e -> {
-            try {
-                binder.getBean().setRolled(true);
-                binder.getBean().setRespUsernameRolling(respRolling.getValue());
-                orderService.update(binder.getBean());
-                addItemsInSelectOrders(orderService);
-                Notification.show("Данные сохранены.");
-            } catch (Exception exception) {
-                binder.getBean().setRolled(false);
-                binder.getBean().setRespUsernameRolling("");
-                Notification.show("Ошибка при сохранении данных");
+            if (!orderId.isEmpty() && !rollingTime.isEmpty()) {
+                try {
+                    binder.getBean().setRolled(true);
+                    binder.getBean().setRollingTime(rollingTime.getValue());
+                    //binder.getBean().setRespUsernameRolling(respRolling.getValue());
+                    orderService.update(binder.getBean());
+                    addItemsInSelectOrders(orderService);
+                    Notification.show("Данные сохранены.");
+                } catch (Exception exception) {
+                    binder.getBean().setRolled(false);
+                    //binder.getBean().setRespUsernameRolling("");
+                    Notification.show("Ошибка при сохранении данных");
+                }
+            } else {
+                Notification.show("Заполните все поля");
             }
-
             clearForm();
         });
     }
@@ -92,9 +92,7 @@ public class RollingFormView extends Div {
 
     private void clearForm() {
         orderId.clear();
-
-        respRolling.setValue(VaadinSession.getCurrent().getAttribute("username").toString());
-
+        rollingTime.clear();
         save.setEnabled(false);
     }
 
@@ -105,7 +103,7 @@ public class RollingFormView extends Div {
     private Component createFormLayout() {
         FormLayout formLayout = new FormLayout();
 
-        formLayout.add(orderId, respRolling);
+        formLayout.add(orderId, rollingTime);
         return formLayout;
     }
 

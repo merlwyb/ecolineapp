@@ -11,7 +11,7 @@ import javax.annotation.security.RolesAllowed;
 
 @PageTitle("Стартовая страница")
 @Route(value = "", layout = MainLayout.class)
-@RolesAllowed({"admin","user","weigher","technologist","operator","rollerman","labworker","role6","role7"})
+@RolesAllowed({"admin","user","weigher","technologist","machinist","rollerman","labworker","role6","role7"})
 public class MainView  extends VerticalLayout {
 
     public MainView() {

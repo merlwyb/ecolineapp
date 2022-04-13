@@ -1,15 +1,13 @@
 package com.ecoline.application.data.generator;
 
 import com.ecoline.application.data.Role;
-import com.ecoline.application.data.entity.Order;
-import com.ecoline.application.data.entity.Portion;
-import com.ecoline.application.data.entity.User;
-import com.ecoline.application.data.repository.OrderRepository;
-import com.ecoline.application.data.repository.PortionRepository;
-import com.ecoline.application.data.repository.UserRepository;
+import com.ecoline.application.data.entity.*;
+import com.ecoline.application.data.repository.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 
+import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,271 +21,115 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class DataGenerator {
 
     @Bean
-    public CommandLineRunner loadData(PasswordEncoder passwordEncoder, UserRepository userRepository, OrderRepository orderRepository,
-                                      PortionRepository portionRepository) {
+    public CommandLineRunner loadData(PasswordEncoder passwordEncoder, UserRepository userRepository,
+                                      RecipeRepository recipeRepository, RecipePartRepository recipePartRepository,
+                                      TechnologicalCardRepository technologicalCardRepository, ComponentPortionRepository componentPortionRepository,
+                                      OrderRepository orderRepository, LabJournalRepository labJournalRepository) {
         return args -> {
             Logger logger = LoggerFactory.getLogger(getClass());
             int seed = 123;
 
             logger.info("Generating data");
 
-//            logger.info("... generating 100 Sample Address entities...");
-//            ExampleDataGenerator<SampleAddress> sampleAddressRepositoryGenerator = new ExampleDataGenerator<>(
-//                    SampleAddress.class, LocalDateTime.of(2021, 12, 28, 0, 0, 0));
-//            sampleAddressRepositoryGenerator.setData(SampleAddress::setId, DataType.ID);
-//            sampleAddressRepositoryGenerator.setData(SampleAddress::setStreet, DataType.ADDRESS);
-//            sampleAddressRepositoryGenerator.setData(SampleAddress::setPostalCode, DataType.ZIP_CODE);
-//            sampleAddressRepositoryGenerator.setData(SampleAddress::setCity, DataType.CITY);
-//            sampleAddressRepositoryGenerator.setData(SampleAddress::setState, DataType.STATE);
-//            sampleAddressRepositoryGenerator.setData(SampleAddress::setCountry, DataType.COUNTRY);
-//            sampleAddressRepository.saveAll(sampleAddressRepositoryGenerator.create(100, seed));
-//
-//            logger.info("... generating 100 Sample Book entities...");
-//            ExampleDataGenerator<SampleBook> sampleBookRepositoryGenerator = new ExampleDataGenerator<>(
-//                    SampleBook.class, LocalDateTime.of(2021, 12, 28, 0, 0, 0));
-//            sampleBookRepositoryGenerator.setData(SampleBook::setId, DataType.ID);
-//            sampleBookRepositoryGenerator.setData(SampleBook::setImage, DataType.BOOK_IMAGE_URL);
-//            sampleBookRepositoryGenerator.setData(SampleBook::setName, DataType.BOOK_TITLE);
-//            sampleBookRepositoryGenerator.setData(SampleBook::setAuthor, DataType.FULL_NAME);
-//            sampleBookRepositoryGenerator.setData(SampleBook::setPublicationDate, DataType.DATE_OF_BIRTH);
-//            sampleBookRepositoryGenerator.setData(SampleBook::setPages, DataType.NUMBER_UP_TO_1000);
-//            sampleBookRepositoryGenerator.setData(SampleBook::setIsbn, DataType.EAN13);
-//            sampleBookRepository.saveAll(sampleBookRepositoryGenerator.create(100, seed));
-//
-//            logger.info("... generating 100 Sample Food Product entities...");
-//            ExampleDataGenerator<SampleFoodProduct> sampleFoodProductRepositoryGenerator = new ExampleDataGenerator<>(
-//                    SampleFoodProduct.class, LocalDateTime.of(2021, 12, 28, 0, 0, 0));
-//            sampleFoodProductRepositoryGenerator.setData(SampleFoodProduct::setId, DataType.ID);
-//            sampleFoodProductRepositoryGenerator.setData(SampleFoodProduct::setImage, DataType.FOOD_PRODUCT_IMAGE);
-//            sampleFoodProductRepositoryGenerator.setData(SampleFoodProduct::setName, DataType.FOOD_PRODUCT_NAME);
-//            sampleFoodProductRepositoryGenerator.setData(SampleFoodProduct::setEanCode, DataType.FOOD_PRODUCT_EAN);
-//            sampleFoodProductRepository.saveAll(sampleFoodProductRepositoryGenerator.create(100, seed));
+
+            recipePartRepository.save(new RecipePart("Каучук","Каучук СП-16-542-23ОРРА",27.523, 0.015 ));
+            recipePartRepository.save(new RecipePart("Каучук","Каучук ОВ-15-128-ОА3212",36.523, 0.015 ));
+            recipePartRepository.save(new RecipePart("Сыпучая смесь","Сыпучая смесь СП-16-542-23ОРРА",27.523, 0.015 ));
+            recipePartRepository.save(new RecipePart("Сыпучая смесь","Сыпучая смесь ОВ-15-128-ОА3212",65.523, 0.015 ));
+            recipePartRepository.save(new RecipePart("Мел","Мел СП-16-542-23ОРРА",98.521, 0.015 ));
+            recipePartRepository.save(new RecipePart("Мел","Мел ОВ-15-128-ОА3212",2.232, 0.015 ));
+            recipePartRepository.save(new RecipePart("Техуглерод","Углерод СП-16-542-23ОРРА",14.111, 0.015 ));
+            recipePartRepository.save(new RecipePart("Техуглерод","Углерод УГ-15-128-ОА3212",11.523, 0.015 ));
+
+
+
+            Recipe recipe = new Recipe();
+            recipe.getRecipeParts().addAll(Set.of(recipePartRepository.getById(1L), recipePartRepository.getById(3L), recipePartRepository.getById(5L), recipePartRepository.getById(7L)));
+            recipe.setRecipeStringIdentifier("П-24-26");
+            recipeRepository.save(recipe);
+
+
+            Recipe recipe1 = new Recipe();
+            recipe1.getRecipeParts().addAll(Set.of(recipePartRepository.getById(2L), recipePartRepository.getById(4L), recipePartRepository.getById(6L), recipePartRepository.getById(8L)));
+            recipe1.setRecipeStringIdentifier("К-15-22");
+            recipeRepository.save(recipe1);
+
+            Recipe recipe2 = new Recipe();
+            recipe2.getRecipeParts().addAll(Set.of(recipePartRepository.getById(1L)));
+            recipe2.setRecipeStringIdentifier("К-66-23");
+            recipeRepository.save(recipe2);
+
+
 
             Order order = new Order();
-            order.setId(13154L);
-            //order.setRubberId(1L);
-            //order.setBulkId(2L);
-            //order.setChalkId(3L);
-            //order.setCarbonId(4L);
-            //order.setCorrected(false);
-            //order.setMixed(false);
-            //order.setRolled(false);
-            //order.setSelected(false);
+            order.setStringIdentifier("ИК123-23-3-321");
+            order.setWeightRequired(800);
             orderRepository.save(order);
 
-
             Order order1 = new Order();
-            order1.setId(835721L);
-            order1.setRubberId(5L);
-            order1.setBulkId(6L);
-            order1.setChalkId(7L);
-            order1.setCarbonId(8L);
-            order1.setCorrected(true);
-            order1.setMixed(true);
-            order1.setRolled(false);
-            order1.setSelected(false);
+            order1.setWeightRequired(900);
+            order1.setStringIdentifier("ИК244-13-6-862");
             orderRepository.save(order1);
 
-//            Order order2 = new Order();
-//            order2.setId(142412L);
-//            order2.setBulkId(23L);
-//            orderRepository.save(order2);
-//
-//            Order order3 = new Order();
-//            order3.setId(34621L);
-//            order3.setChalkId(25L);
-//            orderRepository.save(order3);
-//
-//            Order order4 = new Order();
-//            order4.setId(243541L);
-//            order4.setCarbonId(26L);
-//            orderRepository.save(order4);
-//
-//            Order order5 = new Order();
-//            order5.setId(2435411L);
-//            order5.setCarbonId(26L);
-//            orderRepository.save(order5);
-//
-//            Order order6 = new Order();
-//            order6.setId(2435412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//
-//            order6.setId(24354121L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(24354122L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(24354123L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(24354124L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(24354125L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(24354126L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(24354127L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(24354128L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(24354129L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2435411L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2435415L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2435124L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(243546L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(243547L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(243548L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2435489L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(243548L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2435111L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2435222L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2435333L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2435112L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2435113L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2435116L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(243129L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(243312L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2421312L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(242312L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2465412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2455412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2477412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2488412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2499412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2421412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2429412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(246712L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(246812L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2469412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(298412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2995412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2005412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2095412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2085412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2055412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(20045412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2332412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2331412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
-//            order6.setId(2333412L);
-//            order6.setCarbonId(26L);
-//            orderRepository.save(order6);
+            Order order2 = new Order();
+            order2.setWeightRequired(200);
+            order2.setStringIdentifier("КК324-23-6-899");
+            orderRepository.save(order2);
+
+            ComponentPortion componentPortion = new ComponentPortion();
+            componentPortion.setComponentName("Каучук СП-15");
 
 
-            Portion portion = new Portion();
-            portion.setComponent("Каучук");
-            portion.setWeight(38.2);
-            portion.setRespUsername("admin");
-            portionRepository.save(portion);
-            portion.setComponent("Каучук");
-            portion.setWeight(32.44);
-            portion.setRespUsername("admin");
-            portionRepository.save(portion);
-            portion.setComponent("Каучук");
-            portion.setWeight(39.2);
-            portion.setRespUsername("admin");
-            portionRepository.save(portion);
-            portion.setComponent("Каучук");
-            portion.setWeight(54.2);
-            portion.setRespUsername("admin");
-            portionRepository.save(portion);
 
-            Portion portion1 = new Portion();
-            portion1.setComponent("Каучук");
-            portion1.setWeight(44.2);
-            portion1.setRespUsername("user");
-            portionRepository.save(portion1);
+            LabJournal labJournal = new LabJournal();
+            labJournal.setDate(LocalDate.now());
+            labJournal.setBrand("П-7");
+            labJournal.setNumberLaying("51");
+            labJournal.setVulcanizationDate(LocalDate.now().plusDays(1));
+            labJournal.setVulcanizationTemperature(151);
+            labJournal.setVulcanizationTime(55);
+            labJournal.setHardnessActual(66);
+            labJournal.setHardnessIdeal("65-76");
+            labJournal.setEnduranceActual(14.3);
+            labJournal.setEnduranceIdeal("8,0");
+            labJournal.setLengtheningActual(300);
+            labJournal.setLengtheningIdeal("200-350");
+            labJournal.setDeformationActual("5,4%");
+            labJournal.setVylezhka("+6+16");
+            labJournal.setCompany("САПТ");
+            labJournalRepository.save(labJournal);
+
+
 
             logger.info("... generating 7 User entities...");
 
-            User user1 = new User();
-            user1.setName("Иванов Иван");
-            user1.setUsername("user1");
-            user1.setHashedPassword(passwordEncoder.encode("user1"));
-           user1.setRoles(Collections.singleton(Role.WEIGHER));
-            userRepository.save(user1);
+            User user11 = new User();
+            user11.setName("Иванов Иван");
+            user11.setUsername("user11");
+            user11.setHashedPassword(passwordEncoder.encode("user11"));
+            user11.setRoles(Collections.singleton(Role.WEIGHER_RUBBER));
+            userRepository.save(user11);
+
+            User user12 = new User();
+            user12.setName("Евгеньева Мария");
+            user12.setUsername("user12");
+            user12.setHashedPassword(passwordEncoder.encode("user12"));
+            user12.setRoles(Collections.singleton(Role.WEIGHER_BULK));
+            userRepository.save(user12);
+
+            User user13 = new User();
+            user13.setName("Щеголов Олег");
+            user13.setUsername("user13");
+            user13.setHashedPassword(passwordEncoder.encode("user13"));
+            user13.setRoles(Collections.singleton(Role.WEIGHER_CHALK));
+            userRepository.save(user13);
+
+            User user14 = new User();
+            user14.setName("Зубов Михаил");
+            user14.setUsername("user14");
+            user14.setHashedPassword(passwordEncoder.encode("user14"));
+            user14.setRoles(Collections.singleton(Role.WEIGHER_CARBON));
+            userRepository.save(user14);
 
             User user2 = new User();
             user2.setName("Егоров Егор");
@@ -300,7 +142,7 @@ public class DataGenerator {
             user3.setName("Николаев Александр");
             user3.setUsername("user3");
             user3.setHashedPassword(passwordEncoder.encode("user3"));
-            user3.setRoles(Collections.singleton(Role.OPERATOR));
+            user3.setRoles(Collections.singleton(Role.MACHINIST));
             userRepository.save(user3);
 
             User user4 = new User();
@@ -330,7 +172,7 @@ public class DataGenerator {
             admin.setName("Егоров Анатолий");
             admin.setUsername("admin");
             admin.setHashedPassword(passwordEncoder.encode("admin"));
-            admin.setRoles(Stream.of(Role.USER, Role.ADMIN, Role.WEIGHER, Role.TECHNOLOGIST, Role.OPERATOR, Role.ROLLERMAN, Role.LABWORKER, Role.ROLE6, Role.ROLE7).collect(Collectors.toSet()));
+            admin.setRoles(Stream.of(Role.USER, Role.ADMIN, Role.WEIGHER_RUBBER, Role.WEIGHER_BULK, Role.WEIGHER_CHALK, Role.WEIGHER_CARBON, Role.TECHNOLOGIST, Role.MACHINIST, Role.ROLLERMAN, Role.LABWORKER, Role.ROLE6, Role.ROLE7).collect(Collectors.toSet()));
             userRepository.save(admin);
 
             logger.info("Generated demo data");
