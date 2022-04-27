@@ -1,6 +1,7 @@
 package com.ecoline.application.data.service;
 
 import com.ecoline.application.data.entity.Order;
+import com.ecoline.application.data.entity.Recipe;
 import com.ecoline.application.data.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,6 +58,10 @@ public class OrderService {
         return orderRepository.findAllWhereIsWeighted();
     }
 
+    public List<Order> getAll() {
+        return orderRepository.findAll();
+    }
+
 //    @Transactional(readOnly = true)
 //    public List<Long> getIdsWithoutComponent(String component) {
 //        switch (component) {
@@ -105,4 +110,5 @@ public class OrderService {
 //    }
 //
     public List<Order> getAllWhereIsNotDried() {return orderRepository.findAllWhereIsNotDried();    }
+    public List<Order> getAllWhereIsCompleted() {return orderRepository.findAllWhereIsCompleted();    }
 }

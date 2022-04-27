@@ -93,6 +93,7 @@ public class TechnologistOrderDetailView extends Div {
         });
 
         grid.addColumn("id").setAutoWidth(true).setHeader("№");
+        grid.addColumn("company").setAutoWidth(true).setHeader("Заказчик");
         grid.addColumn("stringIdentifier").setAutoWidth(true).setHeader("Идентификатор заказа");
         grid.addColumn("weightRequired").setAutoWidth(true).setHeader("Вес заказа");
         grid.addComponentColumn(item -> {

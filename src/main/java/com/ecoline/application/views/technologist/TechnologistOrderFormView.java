@@ -23,8 +23,10 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,6 +50,9 @@ public class TechnologistOrderFormView extends Div {
     private Grid<RecipePart> grid = new Grid<>(RecipePart.class, false);
 
     private Binder<Order> binder = new Binder(Order.class);
+
+    @Autowired
+    private LogJournalService logJournalService;
 
     public TechnologistOrderFormView(OrderService orderService, RecipeService recipeService,
                                      RecipeCardService recipeCardService, RecipeCardPartService recipeCardPartService) {
@@ -112,6 +117,7 @@ public class TechnologistOrderFormView extends Div {
                 orderService.update(binder.getBean());
 
                 Notification.show("Данные сохранены.");
+                logJournalService.update(new LogJournal(LocalDateTime.now(), VaadinSession.getCurrent().getAttribute("username").toString(), "Редактирование заказа", "Пользователь отредактировал заказ №" + binder.getBean().getStringIdentifier()));
                 clearForm();
                 UI.getCurrent().navigate(TechnologistOrderDetailView.class);
             } else {

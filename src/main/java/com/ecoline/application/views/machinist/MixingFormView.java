@@ -24,9 +24,11 @@ import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
 import javax.swing.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,6 +47,8 @@ public class MixingFormView extends Div {
     private Label recipeLabel = new Label("Содержимое рецепта");
     private Grid<ComponentPortion> grid = new Grid<>(ComponentPortion.class, false);
 
+    @Autowired
+    private LogJournalService logJournalService;
 
     public MixingFormView(OrderService orderService, ComponentPortionService componentPortionService) {
         addClassName("person-form-view");
@@ -95,6 +99,7 @@ public class MixingFormView extends Div {
                 order.setMixed(true);
                 orderService.update(order);
                 Notification.show("Данные сохранены.");
+                logJournalService.update(new LogJournal(LocalDateTime.now(), VaadinSession.getCurrent().getAttribute("username").toString(), "Смешивание", "Пользователь отметил смешивание заказ №" + orderStringIdentifierSelect.getValue()));
                 mix.setEnabled(false);
                 orderStringIdentifierSelect.setItems(orderService.getAllWhereIsWeighted().stream().map(Order::getStringIdentifier).collect(Collectors.toList()));
             } else {
@@ -139,6 +144,7 @@ public class MixingFormView extends Div {
         recipeLayout.addClassNames("master-detail-view", "flex", "flex-col", "h-full");
         recipeLayout.setSizeFull();
         recipeLayout.add(recipeLabel, grid, mark);
+        mark.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         recipeLayout.setMargin(true);
 
         return recipeLayout;

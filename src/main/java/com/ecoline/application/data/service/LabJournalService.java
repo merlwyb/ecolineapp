@@ -44,4 +44,8 @@ public class LabJournalService {
     public List<LabJournal> getAll() {
         return labJournalRepository.findAll();
     }
+
+    public List<LabJournal> getAllByStringIdentifier(String stringIdentifier) {
+        return labJournalRepository.findAllByStringIdentifier(stringIdentifier);
+    }
 }

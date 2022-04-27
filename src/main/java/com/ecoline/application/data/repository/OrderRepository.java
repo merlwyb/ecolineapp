@@ -41,6 +41,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("select o from Order o where o.isMixed=true and o.isRolled=true and o.isDried=false")
     List<Order> findAllWhereIsNotDried();
+
+    @Query("select o from Order o where o.isMixed=true and o.isRolled=true and o.isDried=true")
+    List<Order> findAllWhereIsCompleted();
 //
 //    @Query("select o from Order o where o.isCorrected=true and o.isMixed=true and o.isRolled=true and o.isDried=true and o.isSelected=false")
 //    List<Order> findAllWhereIsNotSelected();

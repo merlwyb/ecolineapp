@@ -10,6 +10,8 @@ public class LabJournal { //todo ПРИ ВЫБОРЕ МАРКИ РЕЗ СМЕС�
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String stringOrderIdentifier;
+
     private LocalDate date = LocalDate.now(); //дата изготовления
     private String brand; //марка резинов. смеси
     private String numberLaying; // номер закладки
@@ -42,6 +44,14 @@ public class LabJournal { //todo ПРИ ВЫБОРЕ МАРКИ РЕЗ СМЕС�
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getStringOrderIdentifier() {
+        return stringOrderIdentifier;
+    }
+
+    public void setStringOrderIdentifier(String stringOrderIdentifier) {
+        this.stringOrderIdentifier = stringOrderIdentifier;
     }
 
     public LocalDate getDate() {

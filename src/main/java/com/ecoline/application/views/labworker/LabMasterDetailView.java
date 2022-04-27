@@ -1,12 +1,18 @@
 package com.ecoline.application.views.labworker;
 
 import com.ecoline.application.data.entity.LabJournal;
+import com.ecoline.application.data.entity.LogJournal;
+import com.ecoline.application.data.entity.Order;
+import com.ecoline.application.data.entity.Recipe;
 import com.ecoline.application.data.service.LabJournalService;
+import com.ecoline.application.data.service.LogJournalService;
+import com.ecoline.application.data.service.OrderService;
 import com.ecoline.application.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -15,8 +21,10 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -29,12 +37,15 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.security.RolesAllowed;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,7 +59,9 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
     private final String LABJOURNAL_EDIT_ROUTE_TEMPLATE = "lab-master-detail/%s/edit";
 
     private Grid<LabJournal> grid = new Grid<>(LabJournal.class, false);
+    private ComboBox<Order> orderStringIdentifierSelector = new ComboBox<>("Номер заказа");
 
+    //private TextField stringOrderIdentifier;
     private DatePicker date;
     private TextField brand;
     private TextField numberLaying;
@@ -63,7 +76,7 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
     private TextField lengtheningIdeal;
     private TextField deformationActual;
     private TextField vylezhka;
-    private TextField company;
+    //private TextField company;
 
     private Button cancel = new Button("Очистить");
     private Button save = new Button("Сохранить");
@@ -73,16 +86,20 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
     private LabJournal labJournal;
 
     private final LabJournalService labJournalService;
+    private final OrderService orderService;
 
     @Autowired
-    public LabMasterDetailView(LabJournalService labJournalService) {
+    private LogJournalService logJournalService;
+
+    public LabMasterDetailView(LabJournalService labJournalService, OrderService orderService) {
         this.labJournalService = labJournalService;
+        this.orderService = orderService;
         addClassNames("master-detail-view", "flex", "flex-col", "h-full");
 
         // Create UI
         SplitLayout splitLayout = new SplitLayout();
 
-
+        add(createOrderLayout()); //TODO заполнение журнала при выборе заказа
         createGridLayout(splitLayout);
         createEditorLayout(splitLayout);
         splitLayout.setOrientation(SplitLayout.Orientation.VERTICAL);
@@ -90,7 +107,21 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
         add(splitLayout);
 
         // Configures
+        //stringOrderIdentifier.setReadOnly(true);
         date.setReadOnly(true);
+        //company.setReadOnly(true); //todo заполнение компании автоматически
+        save.setEnabled(false);
+        vulcanizationTemperature.setSuffixComponent(new Span("°C"));
+        vulcanizationTime.setSuffixComponent(new Span("с"));
+        hardnessIdeal.setSuffixComponent(new Span("у.е."));
+        hardnessActual.setSuffixComponent(new Span("у.е."));
+        enduranceIdeal.setSuffixComponent(new Span("мПа"));
+        enduranceActual.setSuffixComponent(new Span("мПа"));
+        lengtheningIdeal.setSuffixComponent(new Span("%"));
+        lengtheningActual.setSuffixComponent(new Span("%"));
+//        numberLaying, vulcanizationDate, vulcanizationTemperature,
+//                vulcanizationTime, hardnessActual, hardnessIdeal, enduranceActual, enduranceIdeal, lengtheningActual,
+//                lengtheningIdeal, deformationActual, vylezhka, company
 
         // Configure Grid
         grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
@@ -121,9 +152,24 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
         headerRow.join(end1, end2).setText("Усл. прочность, н.м., мПа");
         headerRow.join(len1, len2).setText("Относит. удлинение, н.м., %");
 
-        grid.setItems(query -> labJournalService.list(
-                PageRequest.of(query.getPage(), query.getPageSize(), VaadinSpringDataHelpers.toSpringDataSort(query)))
-                .stream());
+//        grid.setItems(query -> labJournalService.list(
+//                PageRequest.of(query.getPage(), query.getPageSize(), VaadinSpringDataHelpers.toSpringDataSort(query)))
+//                .stream());
+        orderStringIdentifierSelector.setItems(orderService.getAllWhereIsCompleted());
+        orderStringIdentifierSelector.setItemLabelGenerator(Order::getStringIdentifier);
+        orderStringIdentifierSelector.addValueChangeListener(e -> {
+                    if (!orderStringIdentifierSelector.isEmpty()) {
+                        save.setEnabled(true);
+                        grid.setItems(labJournalService.getAllByStringIdentifier(e.getValue().getStringIdentifier()));
+
+                        //stringOrderIdentifier.setValue(orderStringIdentifierSelector.getValue().getStringIdentifier());
+                        //splitLayout.setVisible(true); //todo вернуть обратно
+                    } else {
+                        grid.setItems(new ArrayList<>());
+                        save.setEnabled(false);
+                    }
+                }
+        );
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
         // when a row is selected or deselected, populate form
@@ -147,19 +193,35 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
         });
 
         save.addClickListener(e -> {
-            try {
-                if (this.labJournal == null) {
-                    this.labJournal = new LabJournal();
-                }
-                binder.writeBean(this.labJournal);
+            if (!orderStringIdentifierSelector.isEmpty()) {
+                if (!date.isEmpty() && !brand.isEmpty() && !numberLaying.isEmpty() &&
+                        !vulcanizationDate.isEmpty() && !vulcanizationTemperature.isEmpty() && !vulcanizationTime.isEmpty() &&
+                        !hardnessActual.isEmpty() && !hardnessIdeal.isEmpty() && !enduranceActual.isEmpty() && !enduranceIdeal.isEmpty() &&
+                        !lengtheningActual.isEmpty() && !lengtheningIdeal.isEmpty() && !deformationActual.isEmpty() && !vylezhka.isEmpty()
+                ) {
+                    try {
+                        if (this.labJournal == null) {
+                            this.labJournal = new LabJournal();
+                        }
 
-                labJournalService.update(this.labJournal);
-                clearForm();
-                refreshGrid();
-                Notification.show("LabJournal details stored.");
-                UI.getCurrent().navigate(LabMasterDetailView.class);
-            } catch (ValidationException validationException) {
-                Notification.show("An exception happened while trying to store the labJournal details.");
+                        this.labJournal.setStringOrderIdentifier(orderStringIdentifierSelector.getValue().getStringIdentifier());
+                        this.labJournal.setCompany(orderStringIdentifierSelector.getValue().getCompany());
+                        binder.writeBean(this.labJournal);
+
+                        labJournalService.update(this.labJournal);
+                        clearForm();
+                        refreshGrid();
+                        Notification.show("Данные сохранены.");
+                        logJournalService.update(new LogJournal(LocalDateTime.now(), VaadinSession.getCurrent().getAttribute("username").toString(), "Лаборант", "Пользователь добавил журнал для заказа №" + orderStringIdentifierSelector.getValue().getStringIdentifier()));
+                        UI.getCurrent().navigate(LabMasterDetailView.class);
+                    } catch (ValidationException validationException) {
+                        Notification.show("Произошла ошибка при сохранении данных.");
+                    }
+                } else {
+                    Notification.show("Заполните все поля");
+                }
+            } else {
+                Notification.show("Выберите заказ");
             }
         });
 
@@ -187,13 +249,14 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
 
     private void createEditorLayout(SplitLayout splitLayout) {
         Div editorLayoutDiv = new Div();
-        editorLayoutDiv.setClassName("flex flex-col");
+        editorLayoutDiv.setClassName("person-form1-view flex flex-col");
 
         Div editorDiv = new Div();
-        editorDiv.setClassName("editor");
+        editorDiv.setClassName("person-form1-view editor");
         editorLayoutDiv.add(editorDiv);
 
         FormLayout formLayout = new FormLayout();
+        //stringOrderIdentifier = new TextField("Номер заказа");
         date = new DatePicker("Дата изготовления");
         brand = new TextField("Марка резинов. смеси");
         numberLaying = new TextField("Номер закладки");
@@ -208,10 +271,9 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
         lengtheningIdeal = new TextField("Относ. удлинение - норма");
         deformationActual = new TextField("Деформация - факт.");
         vylezhka = new TextField("Вылежка");
-        company = new TextField("Потребитель");
         Component[] fields = new Component[]{date, brand, numberLaying, vulcanizationDate, vulcanizationTemperature,
                 vulcanizationTime, hardnessActual, hardnessIdeal, enduranceActual, enduranceIdeal, lengtheningActual,
-                lengtheningIdeal, deformationActual, vylezhka, company};
+                lengtheningIdeal, deformationActual, vylezhka};
 
         formLayout.add(fields);
         editorDiv.add(formLayout);
@@ -238,18 +300,30 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
 
     private void refreshGrid() {
         grid.select(null);
-        grid.getLazyDataView().refreshAll();
+        if (!orderStringIdentifierSelector.isEmpty()) {
+            grid.setItems(labJournalService.getAllByStringIdentifier(orderStringIdentifierSelector.getValue().getStringIdentifier()));
+        }
     }
 
     private void clearForm() {
         populateForm(null);
+        //stringOrderIdentifier.setValue(orderStringIdentifierSelector.getValue().getStringIdentifier());
         date.setValue(LocalDate.now());
+        //todo после очистки заполнение данных автоматически
     }
 
     private void populateForm(LabJournal value) {
         this.labJournal = value;
         binder.readBean(this.labJournal);
 
+    }
+
+    private Component createOrderLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.add(orderStringIdentifierSelector);
+        horizontalLayout.setMargin(true);
+        horizontalLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        return horizontalLayout;
     }
 }
 

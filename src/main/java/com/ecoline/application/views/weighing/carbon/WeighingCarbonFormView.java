@@ -4,6 +4,7 @@ import com.ecoline.application.data.entity.ComponentPortion;
 import com.ecoline.application.data.entity.TechnologicalCard;
 import com.ecoline.application.data.entity.util.SumAndCountUtility;
 import com.ecoline.application.data.service.ComponentPortionService;
+import com.ecoline.application.data.service.LogJournalService;
 import com.ecoline.application.data.service.OrderService;
 import com.ecoline.application.data.service.TechnologicalCardService;
 import com.ecoline.application.views.MainLayout;
@@ -58,6 +59,9 @@ public class WeighingCarbonFormView extends Div {
 
     private TechnologicalCard technologicalCard;
     private Random rand = new Random();
+
+    @Autowired
+    private LogJournalService logJournalService;
 
     public WeighingCarbonFormView(@Autowired TechnologicalCardService technologicalCardService,
                                   @Autowired OrderService orderService, @Autowired ComponentPortionService componentPortionService) {

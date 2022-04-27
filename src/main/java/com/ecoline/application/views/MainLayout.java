@@ -19,6 +19,9 @@ import com.ecoline.application.security.AuthenticatedUser;
 //import com.ecoline.application.views.weighing.rubber.WeighingRubberDetailView;
 //import com.ecoline.application.views.weighing.rubber.WeighingRubberFormView;
 //import com.ecoline.application.views.weighing.rubber.WeighingRubberView;
+import com.ecoline.application.views.admin.AdminLogDetailView;
+import com.ecoline.application.views.admin.AdminUsersDetailView;
+import com.ecoline.application.views.admin.AdminView;
 import com.ecoline.application.views.labworker.LabMasterDetailView;
 import com.ecoline.application.views.labworker.LabView;
 import com.ecoline.application.views.machinist.MixingFormView;
@@ -48,6 +51,8 @@ import com.vaadin.flow.component.html.Nav;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.Router;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
@@ -153,6 +158,12 @@ public class MainLayout extends AppLayout {
 
     private List<RouterLink> createLinks() {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{
+
+                new MenuItemInfo("Панель администратора", "la la-user", AdminView.class),
+
+                new MenuItemInfo("Журнал логов", "la la-columns", AdminLogDetailView.class),
+
+                new MenuItemInfo("Список пользователей", "la la-columns", AdminUsersDetailView.class),
 
                 new MenuItemInfo("Навесчик каучука", "la la-user", WeighingRubberView.class),
 

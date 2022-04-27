@@ -28,9 +28,11 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -71,6 +73,9 @@ public class TechnologistRecipeCardMasterDetailView extends Div implements Befor
     private RecipeCardPartService recipeCardPartService;
     private RecipeService recipeService;
     private RecipePartService recipePartService;
+
+    @Autowired
+    private LogJournalService logJournalService;
 
     public TechnologistRecipeCardMasterDetailView(@Autowired OrderService orderService, @Autowired RecipeCardService recipeCardService,
                                                   @Autowired RecipeCardPartService recipeCardPartService, @Autowired RecipePartService recipePartService,
@@ -153,6 +158,7 @@ public class TechnologistRecipeCardMasterDetailView extends Div implements Befor
                 recipe.getRecipeParts().addAll(recipeParts);
                 recipeService.update(recipe);
                 Notification.show("Рецептурная карта была добавлена как новый рецепт");
+                logJournalService.update(new LogJournal(LocalDateTime.now(), VaadinSession.getCurrent().getAttribute("username").toString(), "Рецептурная карта", "Пользователь добавил рец. карту как новый рецепт c id=" + recipe.getId()));
             } else {
                 Notification.show("Введите правильный идентификатор");
             }
@@ -183,6 +189,7 @@ public class TechnologistRecipeCardMasterDetailView extends Div implements Befor
                     }
                     clearForm();
                     refreshGrid();
+                    //logJournalService.update(new LogJournal(LocalDateTime.now(), VaadinSession.getCurrent().getAttribute("username").toString(), "Рецептурная карта", "Пользователь изменил рец. карту заказа №" + orderStringIdentifierSelect.getValue()));
                     UI.getCurrent().navigate(TechnologistRecipeCardMasterDetailView.class);
                 } catch (ValidationException validationException) {
                     Notification.show("Ошибка при сохранении данных.");

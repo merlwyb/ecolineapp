@@ -26,6 +26,7 @@ public class Order {
     private boolean isRolled = false;
     private int rollingTime = 0;
     private boolean isDried = false;
+    private String company;
 //    private String respUsername = "";
 //    private boolean isCorrected = false;
 //
@@ -136,6 +137,14 @@ public class Order {
 
     public void setDried(boolean dried) {
         isDried = dried;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 }
 

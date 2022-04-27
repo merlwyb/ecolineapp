@@ -64,17 +64,31 @@ public class DataGenerator {
             Order order = new Order();
             order.setStringIdentifier("ИК123-23-3-321");
             order.setWeightRequired(800);
+            order.setCompany("САПТ");
             orderRepository.save(order);
 
             Order order1 = new Order();
             order1.setWeightRequired(900);
             order1.setStringIdentifier("ИК244-13-6-862");
+            order1.setCompany("РОСК");
             orderRepository.save(order1);
 
             Order order2 = new Order();
             order2.setWeightRequired(200);
             order2.setStringIdentifier("КК324-23-6-899");
+            order2.setCompany("УРГТ");
             orderRepository.save(order2);
+
+            Order order3 = new Order();
+            order3.setWeightRequired(10);
+            order3.setStringIdentifier("РВ232-12-3-566");
+            order3.setCompany("РУГП");
+            order3.setMixed(true);
+            order3.setSend(true);
+            order3.setRecipeSelected(true);
+            order3.setDried(true);
+            order3.setRolled(true);
+            orderRepository.save(order3);
 
             ComponentPortion componentPortion = new ComponentPortion();
             componentPortion.setComponentName("Каучук СП-15");

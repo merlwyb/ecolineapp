@@ -1,7 +1,9 @@
 package com.ecoline.application.views.technologist;
 
+import com.ecoline.application.data.entity.LogJournal;
 import com.ecoline.application.data.entity.Recipe;
 import com.ecoline.application.data.entity.RecipePart;
+import com.ecoline.application.data.service.LogJournalService;
 import com.ecoline.application.data.service.RecipePartService;
 import com.ecoline.application.data.service.RecipeService;
 import com.ecoline.application.views.MainLayout;
@@ -31,11 +33,13 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.security.RolesAllowed;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -72,6 +76,9 @@ public class TechnologistRecipeMasterDetailView extends Div implements BeforeEnt
 
     private RecipeService recipeService;
     private RecipePartService recipePartService;
+
+    @Autowired
+    private LogJournalService logJournalService;
 
     public TechnologistRecipeMasterDetailView(@Autowired RecipeService recipeService, @Autowired RecipePartService recipePartService) {
         this.recipeService = recipeService;
@@ -140,6 +147,7 @@ public class TechnologistRecipeMasterDetailView extends Div implements BeforeEnt
                 recipe.setRecipeStringIdentifier(recipeString.getValue());
                 recipeService.update(recipe);
                 Notification.show("Новый рецепт был добавлен");
+                logJournalService.update(new LogJournal(LocalDateTime.now(), VaadinSession.getCurrent().getAttribute("username").toString(), "Рецепт", "Пользователь добавил новый рецепт №" + recipeString.getValue()));
                 try {
                     recipeStringIdentifierSelect.setItems(recipeService.getAll().stream().map(Recipe::getRecipeStringIdentifier).collect(Collectors.toList()));
                 } catch (Exception exception) {

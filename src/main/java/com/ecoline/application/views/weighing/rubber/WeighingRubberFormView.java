@@ -1,9 +1,11 @@
 package com.ecoline.application.views.weighing.rubber;
 
 import com.ecoline.application.data.entity.ComponentPortion;
+import com.ecoline.application.data.entity.LogJournal;
 import com.ecoline.application.data.entity.TechnologicalCard;
 import com.ecoline.application.data.entity.util.SumAndCountUtility;
 import com.ecoline.application.data.service.ComponentPortionService;
+import com.ecoline.application.data.service.LogJournalService;
 import com.ecoline.application.data.service.OrderService;
 import com.ecoline.application.data.service.TechnologicalCardService;
 import com.ecoline.application.views.MainLayout;
@@ -33,6 +35,7 @@ import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 @PageTitle("Форма навески")
@@ -64,6 +67,8 @@ public class WeighingRubberFormView extends Div {
     private TechnologicalCard technologicalCard;
     private Random rand = new Random();
 
+    @Autowired
+    private LogJournalService logJournalService;
 
     public WeighingRubberFormView(@Autowired TechnologicalCardService technologicalCardService,
                                   @Autowired OrderService orderService, @Autowired ComponentPortionService componentPortionService) {
