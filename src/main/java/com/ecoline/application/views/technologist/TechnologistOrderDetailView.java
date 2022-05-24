@@ -32,7 +32,7 @@ import javax.annotation.security.RolesAllowed;
 
 @PageTitle("Список заказов")
 @Route(value = "technologist-order-detail", layout = MainLayout.class)
-@RolesAllowed({"admin", "user", "technologist"})
+@RolesAllowed({"admin", "technologist"})
 public class TechnologistOrderDetailView extends Div {
 
     private Grid<Order> grid = new Grid<>(Order.class, false);
@@ -42,7 +42,6 @@ public class TechnologistOrderDetailView extends Div {
     private Button sendForWeighing = new Button("Отправить на навеску");
     private Button recipeMasterDetail = new Button("Перейти к редактированию рецептур");
 
-    private AuthenticatedUser authenticatedUser;
     private Order orderForWeighing;
 
     public TechnologistOrderDetailView(@Autowired OrderService orderService,
@@ -69,7 +68,6 @@ public class TechnologistOrderDetailView extends Div {
         });
 
         sendForWeighing.addClickListener(e -> {
-            //вычисление количества порций
             double tempWeight = orderForWeighing.getRecipeCard().getRecipeCardParts().stream().mapToDouble(RecipeCardPart::getIdealWeight).sum();
             orderForWeighing.setAmount((int) Math.ceil(orderForWeighing.getWeightRequired() / tempWeight));
 

@@ -44,6 +44,4 @@ public class RecipeCardService {
     public List<RecipeCard> getAll() {
         return recipeCardRepository.findAll();
     }
-
-    //public double getWeightOfRecipeCard(){}
 }

@@ -38,9 +38,7 @@ import java.util.stream.Collectors;
 public class TechnologistOrderFormView extends Div {
 
     private TextField stringIdentifier = new TextField("Идентификатор заказа");
-    //private IntegerField amount = new IntegerField("Количество порций");
     private TextField respUsername = new TextField("Отвественный за заказ");
-    //private Select<String> recipeStringIdentifierSelect = new Select<>();
     private ComboBox<Recipe> recipeStringIdentifierSelector = new ComboBox<>("Рецептура");
 
     private Button cancel = new Button("Очистить");
@@ -65,8 +63,6 @@ public class TechnologistOrderFormView extends Div {
 
         stringIdentifier.setReadOnly(true);
 
-        //recipeStringIdentifierSelect.setLabel("Рецептура");
-        //recipeStringIdentifierSelector.setItems(recipeService.getAll().stream().map(Recipe::getRecipeStringIdentifier).collect(Collectors.toList()));
         recipeStringIdentifierSelector.setItems(recipeService.getAll());
         recipeStringIdentifierSelector.setItemLabelGenerator(Recipe::getRecipeStringIdentifier);
         recipeStringIdentifierSelector.setPlaceholder("Выберите рецепт");
@@ -77,24 +73,19 @@ public class TechnologistOrderFormView extends Div {
         grid.addColumn("componentType").setAutoWidth(true).setHeader("Тип");
         grid.addColumn("componentName").setAutoWidth(true).setHeader("Название");
         grid.addColumn("idealWeight").setAutoWidth(true).setHeader("Эталонный вес (кг)");
-        //grid.addColumn("deviation").setAutoWidth(true).setHeader("Отклонение");
 
         binder.bindInstanceFields(this);
 
         try {
             binder.setBean(orderService.getByStringIdentifier(VaadinSession.getCurrent().getAttribute("orderToProceed").toString()));
-            //stringIdentifier.setValue(VaadinSession.getCurrent().getAttribute("orderToProceed").toString());
         } catch (Exception exception) {
             Notification.show("Сначала выберите заказ");
         }
 
 
         recipeStringIdentifierSelector.addValueChangeListener(e -> {
-            //binder.getBean().setRecipe(recipeService.getByRecipeStringIdentifier(recipeStringIdentifierSelect.getValue()));
-            //grid.setItems(recipeService.getByRecipeStringIdentifier(recipeStringIdentifierSelector.getValue()).getRecipeParts());
             grid.setItems(recipeStringIdentifierSelector.getValue().getRecipeParts());
         });
-
 
         cancel.addClickListener(e -> clearForm());
 
@@ -117,7 +108,10 @@ public class TechnologistOrderFormView extends Div {
                 orderService.update(binder.getBean());
 
                 Notification.show("Данные сохранены.");
-                logJournalService.update(new LogJournal(LocalDateTime.now(), VaadinSession.getCurrent().getAttribute("username").toString(), "Редактирование заказа", "Пользователь отредактировал заказ №" + binder.getBean().getStringIdentifier()));
+                logJournalService.update(new LogJournal(LocalDateTime.now(),
+                        VaadinSession.getCurrent().getAttribute("username").toString(),
+                        "Редактирование заказа", "Пользователь отредактировал заказ №" +
+                        binder.getBean().getStringIdentifier()));
                 clearForm();
                 UI.getCurrent().navigate(TechnologistOrderDetailView.class);
             } else {

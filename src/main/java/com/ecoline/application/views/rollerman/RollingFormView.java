@@ -35,7 +35,6 @@ public class RollingFormView extends Div {
 
     private Select<String> orderStringId = new Select<>();
     private IntegerField rollingTime = new IntegerField("Время вальцевания(с)");
-    //private TextField respRolling = new TextField("Ответственный за вальцевание");
 
     private Button cancel = new Button("Отменить");
     private Button save = new Button("Сохранить");
@@ -80,7 +79,7 @@ public class RollingFormView extends Div {
                     Notification.show("Данные сохранены.");
                     logJournalService.update(new LogJournal(LocalDateTime.now(), VaadinSession.getCurrent().getAttribute("username").toString(), "Вальцевание", "Пользователь отметил вальцевание заказ №" + binder.getBean().getStringIdentifier()));
                 } catch (Exception exception) {
-                    binder.getBean().setRolled(false);
+                    //binder.getBean().setRolled(false);
                     //binder.getBean().setRespUsernameRolling("");
                     Notification.show("Ошибка при сохранении данных");
                 }

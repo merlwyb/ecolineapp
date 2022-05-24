@@ -29,7 +29,7 @@ public class AdminView extends VerticalLayout {
     public AdminView() {
         adminDbLabel = new Label("Для перехода в консоль H2 Database, вставьте в строку браузера: http://localhost:8080/h2-console");
         adminLogDetailButton = new Button("Перейти к логам");
-        adminUsersDetailButton = new Button("Перейти к логам");
+        adminUsersDetailButton = new Button("Перейти к списку пользователей");
 
         adminLogDetailButton.addClickListener(e-> UI.getCurrent().navigate(AdminLogDetailView.class));
         adminUsersDetailButton.addClickListener(e-> UI.getCurrent().navigate(AdminUsersDetailView.class));

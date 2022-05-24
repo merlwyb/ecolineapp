@@ -51,9 +51,7 @@ public class WeighingRubberFormView extends Div {
     private NumberField weightIdeal = new NumberField("Вес по рецептуре (кг)");
     private NumberField weightWithDeviation = new NumberField("Рекомендуемый вес (кг)");
     private TextField respUsername = new TextField("Ответственный за навеску");
-    //private Select<Long> orderId = new Select<>();
 
-    //private Button cancel = new Button("Отменить");
     private Button save = new Button("Добавить навеску");
 
     private Grid<TechnologicalCard> grid = new Grid<>(TechnologicalCard.class, false);
@@ -95,7 +93,7 @@ public class WeighingRubberFormView extends Div {
 
 
         RFID.setReadOnly(true);
-        weightActual.setReadOnly(true);
+        //weightActual.setReadOnly(true);
         weightIdeal.setReadOnly(true);
         weightWithDeviation.setReadOnly(true);
         componentName.setReadOnly(true);

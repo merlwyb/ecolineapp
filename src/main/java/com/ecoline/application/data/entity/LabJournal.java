@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "LAB_JOURNAL")
-public class LabJournal { //todo ПРИ ВЫБОРЕ МАРКИ РЕЗ СМЕСИ АВТОМАТ ЗАПОЛНЯЕТСЯ ВУЛКАНИЗАЦИЯ НОРМА
+public class LabJournal {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

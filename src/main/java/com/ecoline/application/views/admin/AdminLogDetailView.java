@@ -72,5 +72,4 @@ public class AdminLogDetailView extends Div {
         grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         grid.setHeightFull();
     }
-
 }

@@ -99,7 +99,9 @@ public class MixingFormView extends Div {
                 order.setMixed(true);
                 orderService.update(order);
                 Notification.show("Данные сохранены.");
-                logJournalService.update(new LogJournal(LocalDateTime.now(), VaadinSession.getCurrent().getAttribute("username").toString(), "Смешивание", "Пользователь отметил смешивание заказ №" + orderStringIdentifierSelect.getValue()));
+                logJournalService.update(new LogJournal(LocalDateTime.now(),
+                        VaadinSession.getCurrent().getAttribute("username").toString(),
+                        "Смешивание", "Пользователь отметил смешивание заказ №" + orderStringIdentifierSelect.getValue()));
                 mix.setEnabled(false);
                 orderStringIdentifierSelect.setItems(orderService.getAllWhereIsWeighted().stream().map(Order::getStringIdentifier).collect(Collectors.toList()));
             } else {

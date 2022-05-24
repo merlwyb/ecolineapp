@@ -54,7 +54,6 @@ public class TechnologistRecipeMasterDetailView extends Div implements BeforeEnt
     private final String RECIPEPART_EDIT_ROUTE_TEMPLATE = "technologist-recipeMasterDetail/%s/edit";
 
     private Grid<RecipePart> grid = new Grid<>(RecipePart.class, false);
-
     private Label recipeLabel = new Label("Идентификатор рецепта");
     private Select<String> recipeStringIdentifierSelect = new Select<>();
     private Label recipeStringLabel = new Label("Идентификатор нового рецепта");

@@ -17,9 +17,6 @@ public class Order {
     @JoinColumn(name = "RECIPECARD_ID")
     private RecipeCard recipeCard;
 
-//    @OneToMany(mappedBy = "order")
-//    private Set<ComponentPortion> componentPortions = new HashSet<>();
-
     private boolean isRecipeSelected = false;
     private boolean isSend = false;
     private boolean isMixed = false;
@@ -27,6 +24,7 @@ public class Order {
     private int rollingTime = 0;
     private boolean isDried = false;
     private String company;
+
 //    private String respUsername = "";
 //    private boolean isCorrected = false;
 //

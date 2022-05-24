@@ -15,7 +15,6 @@ public interface ComponentPortionRepository extends JpaRepository<ComponentPorti
     List<ComponentPortion> findByOrderId(@Param("orderId") Long orderId);
 
 
-    //@Query(value="select sum(weight_actual), count(weight_actual) from component_portion where component_name=:compName and order_id=:orderId", nativeQuery=true )
     @Query("select new com.ecoline.application.data.entity.util.SumAndCountUtility(sum(cp.weightActual), count(cp.weightActual)) " +
             "from ComponentPortion cp where cp.componentName=:compName and cp.order.id=:orderId")
     SumAndCountUtility findSumAndCountForDeviation(@Param("compName") String componentName, @Param("orderId") Long orderId);

@@ -61,7 +61,6 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
     private Grid<LabJournal> grid = new Grid<>(LabJournal.class, false);
     private ComboBox<Order> orderStringIdentifierSelector = new ComboBox<>("Номер заказа");
 
-    //private TextField stringOrderIdentifier;
     private DatePicker date;
     private TextField brand;
     private TextField numberLaying;
@@ -76,7 +75,6 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
     private TextField lengtheningIdeal;
     private TextField deformationActual;
     private TextField vylezhka;
-    //private TextField company;
 
     private Button cancel = new Button("Очистить");
     private Button save = new Button("Сохранить");
@@ -203,7 +201,6 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
                         if (this.labJournal == null) {
                             this.labJournal = new LabJournal();
                         }
-
                         this.labJournal.setStringOrderIdentifier(orderStringIdentifierSelector.getValue().getStringIdentifier());
                         this.labJournal.setCompany(orderStringIdentifierSelector.getValue().getCompany());
                         binder.writeBean(this.labJournal);
@@ -212,7 +209,9 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
                         clearForm();
                         refreshGrid();
                         Notification.show("Данные сохранены.");
-                        logJournalService.update(new LogJournal(LocalDateTime.now(), VaadinSession.getCurrent().getAttribute("username").toString(), "Лаборант", "Пользователь добавил журнал для заказа №" + orderStringIdentifierSelector.getValue().getStringIdentifier()));
+                        logJournalService.update(new LogJournal(LocalDateTime.now(),
+                                VaadinSession.getCurrent().getAttribute("username").toString(), "Лаборант",
+                                "Пользователь добавил журнал для заказа №" + orderStringIdentifierSelector.getValue().getStringIdentifier()));
                         UI.getCurrent().navigate(LabMasterDetailView.class);
                     } catch (ValidationException validationException) {
                         Notification.show("Произошла ошибка при сохранении данных.");
@@ -224,9 +223,7 @@ public class LabMasterDetailView extends Div implements BeforeEnterObserver {
                 Notification.show("Выберите заказ");
             }
         });
-
         clearForm();
-
     }
 
     @Override

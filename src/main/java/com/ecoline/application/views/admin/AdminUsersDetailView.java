@@ -27,7 +27,6 @@ public class AdminUsersDetailView extends Div {
 
     private Grid<User> grid = new Grid<>(User.class, false);
 
-
     public AdminUsersDetailView(@Autowired UserService userService) {
         addClassNames("master-detail-view", "flex", "flex-col", "h-full");
 
@@ -48,5 +47,4 @@ public class AdminUsersDetailView extends Div {
         grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         grid.setHeightFull();
     }
-
 }

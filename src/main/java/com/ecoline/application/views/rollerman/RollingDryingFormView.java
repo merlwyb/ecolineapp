@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 public class RollingDryingFormView extends Div {
 
     private Select<String> orderStringId = new Select<>();
-    //private TextField respDrying = new TextField("Ответственный за сушку");
 
     private Button cancel = new Button("Отменить");
     private Button save = new Button("Сохранить");
