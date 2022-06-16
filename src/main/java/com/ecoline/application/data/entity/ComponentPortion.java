@@ -3,7 +3,6 @@ package com.ecoline.application.data.entity;
 import javax.persistence.*;
 
 //Данные о навеске
-//todo при создании считывается RFID и задаётся навеске
 @Entity
 @Table(name = "COMPONENT_PORTION")
 public class ComponentPortion {

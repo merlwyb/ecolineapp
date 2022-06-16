@@ -11,7 +11,7 @@ import javax.annotation.security.RolesAllowed;
 
 @PageTitle("Машинист")
 @Route(value = "mixing", layout = MainLayout.class)
-@RolesAllowed({"admin","user","operator"})
+@RolesAllowed({"admin","user","machinist"})
 public class MixingView extends VerticalLayout {
 
     private Button mixingFormButton;

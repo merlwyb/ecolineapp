@@ -40,20 +40,18 @@ public class TechnologistOrderFormView extends Div {
     private TextField stringIdentifier = new TextField("Идентификатор заказа");
     private TextField respUsername = new TextField("Отвественный за заказ");
     private ComboBox<Recipe> recipeStringIdentifierSelector = new ComboBox<>("Рецептура");
-
     private Button cancel = new Button("Очистить");
     private Button save = new Button("Сохранить");
-
     private Label recipeLabel = new Label("Содержимое рецепта");
     private Grid<RecipePart> grid = new Grid<>(RecipePart.class, false);
-
     private Binder<Order> binder = new Binder(Order.class);
 
     @Autowired
     private LogJournalService logJournalService;
 
     public TechnologistOrderFormView(OrderService orderService, RecipeService recipeService,
-                                     RecipeCardService recipeCardService, RecipeCardPartService recipeCardPartService) {
+                                     RecipeCardService recipeCardService,
+                                     RecipeCardPartService recipeCardPartService) {
         addClassName("person-form-view");
 
         add(createTitle());
@@ -62,18 +60,14 @@ public class TechnologistOrderFormView extends Div {
         add(createRecipeLayout());
 
         stringIdentifier.setReadOnly(true);
-
         recipeStringIdentifierSelector.setItems(recipeService.getAll());
         recipeStringIdentifierSelector.setItemLabelGenerator(Recipe::getRecipeStringIdentifier);
         recipeStringIdentifierSelector.setPlaceholder("Выберите рецепт");
-
         respUsername.setValue(VaadinSession.getCurrent().getAttribute("username").toString());
         respUsername.setReadOnly(true);
-
         grid.addColumn("componentType").setAutoWidth(true).setHeader("Тип");
         grid.addColumn("componentName").setAutoWidth(true).setHeader("Название");
         grid.addColumn("idealWeight").setAutoWidth(true).setHeader("Эталонный вес (кг)");
-
         binder.bindInstanceFields(this);
 
         try {
@@ -90,16 +84,20 @@ public class TechnologistOrderFormView extends Div {
         cancel.addClickListener(e -> clearForm());
 
         save.addClickListener(e -> {
-            if (!stringIdentifier.isEmpty() && !respUsername.isEmpty() && !recipeStringIdentifierSelector.isEmpty()) {
+            if (!stringIdentifier.isEmpty() && !respUsername.isEmpty()
+                    && !recipeStringIdentifierSelector.isEmpty()) {
                 binder.getBean().setRecipeSelected(true);
                 Recipe recipe = recipeStringIdentifierSelector.getValue();
                 RecipeCard recipeCard = new RecipeCard();
                 recipeCard.setRecipeStringIdentifier(recipe.getRecipeStringIdentifier());
                 Set<RecipeCardPart> recipeCardParts = new HashSet<>();
                 recipe.getRecipeParts().forEach(recipePart ->
-                        recipeCardParts.add(recipeCardPartService.update(new RecipeCardPart(
-                                recipePart.getComponentType(), recipePart.getComponentName(),
-                                recipePart.getIdealWeight(), recipePart.getDeviation()
+                        recipeCardParts.add(
+                                recipeCardPartService.update(new RecipeCardPart(
+                                        recipePart.getComponentType(),
+                                        recipePart.getComponentName(),
+                                        recipePart.getIdealWeight(),
+                                        recipePart.getDeviation()
                         )))
                 );
                 recipeCard.getRecipeCardParts().addAll(recipeCardParts);
@@ -109,8 +107,10 @@ public class TechnologistOrderFormView extends Div {
 
                 Notification.show("Данные сохранены.");
                 logJournalService.update(new LogJournal(LocalDateTime.now(),
-                        VaadinSession.getCurrent().getAttribute("username").toString(),
-                        "Редактирование заказа", "Пользователь отредактировал заказ №" +
+                        VaadinSession.getCurrent()
+                                .getAttribute("username").toString(),
+                        "Редактирование заказа",
+                        "Пользователь отредактировал заказ №" +
                         binder.getBean().getStringIdentifier()));
                 clearForm();
                 UI.getCurrent().navigate(TechnologistOrderDetailView.class);

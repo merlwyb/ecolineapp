@@ -115,10 +115,10 @@ public class WeighingRubberFormView extends Div {
             technologicalCard = grid.getListDataView().getItem(0);
 
             binder.setBean(new ComponentPortion("Каучук"));
-            RFID.setValue(String.valueOf(rand.nextInt(9998) + 1)); //todo заполнение RFID-метки
+            RFID.setValue(String.valueOf(rand.nextInt(9998) + 1));
             respUsername.setValue(VaadinSession.getCurrent().getAttribute("username").toString());
             componentName.setValue(grid.getListDataView().getItem(0).getComponentName());
-            weightActual.setValue(grid.getListDataView().getItem(0).getWeight() - 6 + (int) (Math.random() * 10)); //todo заполнение данных с весов
+            weightActual.setValue(grid.getListDataView().getItem(0).getWeight() - 6 + (int) (Math.random() * 10));
             weightIdeal.setValue(grid.getListDataView().getItem(0).getWeight());
 
             try {

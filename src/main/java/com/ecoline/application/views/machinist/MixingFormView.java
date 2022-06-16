@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 @PageTitle("Добавление смешивания")
 @Route(value = "mixing-proceed", layout = MainLayout.class)
-@RolesAllowed({"admin", "user", "operator"})
+@RolesAllowed({"admin", "user", "machinist"})
 @Uses(Icon.class)
 public class MixingFormView extends Div {
 

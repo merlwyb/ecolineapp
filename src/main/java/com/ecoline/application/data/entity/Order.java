@@ -25,18 +25,6 @@ public class Order {
     private boolean isDried = false;
     private String company;
 
-//    private String respUsername = "";
-//    private boolean isCorrected = false;
-//
-//    private boolean isMixed = false;
-//    private String respUsernameMixing = "";
-//    private boolean isRolled = false;
-//    private String respUsernameRolling = "";
-//    private boolean isDried = false;
-//    private String respUsernameDrying = "";
-//    private boolean isSelected = false;
-//    private String respUsernameSelecting = "";
-
     public Order() {
     }
 
